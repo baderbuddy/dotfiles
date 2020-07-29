@@ -38,6 +38,16 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'dense-analysis/ale'
 Plugin 'digitaltoad/vim-pug'
+Plugin 'mattn/emmet-vim'
+Plugin 'gorodinskiy/vim-coloresque'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'elzr/vim-json'
+Plugin 'groenewege/vim-less'
+Plugin 'panglolss/vim-javascript'
+Plugin 'Shuogo/neocomplete.vim.git'
+Plugin 'Shuogo/neocomplete'
+Plugin 'Shuogo/neocomplete-snippets'
+Plugin 'honza/vim-snippets'
 
 
 " The following are examples of different formats supported.
