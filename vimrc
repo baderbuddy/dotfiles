@@ -81,3 +81,5 @@ set laststatus=2
 "set term=builtin_ansi
 set noshowmode
 colo slate
+set expandtab
+vnoremap <leader>64 c<c-r>=system('base64 --decode', @")<cr><esc>
