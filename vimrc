@@ -18,6 +18,8 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 set pastetoggle=<F2>
+set list
+set listchars=tab:>-
 
 map <Leader>t :NERDTreeToggleVCS<cr>
 
