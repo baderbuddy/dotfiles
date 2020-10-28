@@ -22,6 +22,7 @@ set list
 set listchars=tab:>-
 
 map <Leader>t :NERDTreeToggleVCS<cr>
+map <F7> gg=G<C-o><C-o>
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim

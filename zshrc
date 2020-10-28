@@ -1,9 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -29,7 +29,7 @@ source ~/config/env.sh
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+#ZSH_THEME="powerlevel10k/powerlevel10k"
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -98,6 +98,7 @@ plugins=(
 #    nvm
     npm
     docker
+    zsh-prompt-benchmark
     zsh_reload
 )
 
@@ -152,7 +153,9 @@ source $ZSH/oh-my-zsh.sh
 source <(kubectl completion zsh)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+eval "$(starship init zsh)"
+
 
 alias dotenv=". ./.env"
 alias k="kubectl"
@@ -164,6 +167,19 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 source /home/bader/.cuddlefish/config
 source $HOME/.asdf/asdf.sh
+
+function maybe_git_fetch () {
+  if ! [ -d ".git" ]; then
+    return
+  fi
+  last_fetch=$(stat -c %Y .git/FETCH_HEAD)
+  time_now=$(date +%s)
+  timeout=60
+  if [[ $((time_now - timeout)) -gt $((last_fetch)) ]]; then
+    (git fetch 2> /dev/null &)
+  fi
+}
+
 #eval $(ssh-agent) > /dev/null
 #ssh-add ~/.ssh/id_rsa
 alias kw='watch kubectl'
@@ -177,6 +193,7 @@ precmd () {
       tmux setenv $(tmux display-message -p 'KUBECONFIG_#S_#P_#I') "$KUBECONFIG"
 #    fi
   fi
+  maybe_git_fetch
 }
 
 start-tmux() {
@@ -202,6 +219,10 @@ containerdConfigPatches:
     endpoint = ["http://${reg_name}:${reg_port}"]
 EOF
 
+kubectl create ns metrics-server
+helm upgrade --install metrics bitnami/metrics-server --namespace metrics-server --set apiService.create=true --set extraArgs.kubelet-insecure-tls=true --set extraArgs.kubelet-preferred-address-types=InternalIP --set extraArgs.metric-resolution=30s
+kubectl create ns prometheus
+helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.enabled=false --set kubeStateMetrics.enable=false --set nodeExporter.enabled=false
 running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
 if [ "${running}" != 'true' ]; then
       docker run \
@@ -215,4 +236,6 @@ if [ "${running}" != 'true' ]; then
 for node in $(kind get nodes); do
   kubectl annotate node "${node}" "kind.x-k8s.io/registry=localhost:${reg_port}";
 done
+
 }
+
