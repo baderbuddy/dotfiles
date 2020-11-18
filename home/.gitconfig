@@ -1,0 +1,10 @@
+[include]
+    path = ~/config/gitconfig
+[merge "ours"]
+	driver = true
+[alias]
+    p = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
+    c = "!git add -A && git commit -m "
+    new-branch = "!git checkout master && git pull && git checkout -b "
+[pull]
+	rebase = true

@@ -1,0 +1,130 @@
+add_newline = false
+format = """\
+    $shlvl\
+    ${custom.operatingsystem}\
+    $directory\
+    $username\
+    $hostname\
+    $docker_context\
+    $nodejs\
+    $terraform\
+    $nix_shell\
+    $memory_usage\
+    $env_var\
+    $status\
+    $python\
+    $golang\
+    ${custom.fairwinds}\
+    $aws\
+    $gcloud \
+    $helm\
+    $kubernetes\
+    $git_branch\
+    $git_commit\
+    $git_state\
+    $git_status\
+    $line_break\
+    $jobs\
+    $cmd_duration\
+    $character"""
+
+[shlvl]
+disabled = false
+format = '[\($shlvl\)]($style)'
+symbol = "↕️ "
+style = "green"
+threshold = 3
+
+[memory_usage]
+disabled = false
+
+[character]
+error_symbol = "[✗](bold bright-red)"
+success_symbol = "[➜](bold green)"
+use_symbol_for_status = true
+
+[directory]
+style = "fg:white bg:blue"
+truncation_length = 8
+format = "[  $path]($style)[$read_only]($read_only_style) "
+[directory.substitutions]
+"~" = "~"
+
+[aws]
+disabled = true
+style = "dimmed yellow"
+displayed_items = "all"
+symbol = "  "
+format = "[$symbol$profile(\\($region\\))]($style) "
+
+[gcloud]
+disabled = true
+symbol = " "
+
+[kubernetes]
+symbol = "⎈ "
+format = " [$symbol$context( \\($namespace\\))]($style) "
+style = "bright-blue"
+disabled = true
+
+[custom.operatingsystem]
+symbol = ""
+command = "echo '1'"
+format = "$symbol "
+style = "fg:black bg:white"
+when = "true"
+
+[custom.fairwinds]
+symbol = "🚀"
+command = "echo $PROJECT:$INVENTORY"
+when = """ test "$INVENTORY" != "" """
+style = "bold red"
+
+[jobs]
+disabled = false
+symbol = "&"
+style = "yellow"
+
+[git_branch]
+disabled = false
+format = "[$symbol$branch]($style) "
+symbol = " "
+
+[git_status]
+disabled = false
+style = "yellow"
+show_sync_count = true
+conflicted = "⚔️ "
+ahead = "⇡ ${count}"
+behind = "⇣ ×${count}"
+diverged = "🔱 ⇡ ×${ahead_count}  ⇣ ×${behind_count}"
+untracked = "?${count}"
+stashed = "📦 "
+modified = "!×${count}"
+staged = "+${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️ ${count}"
+
+[golang]
+symbol = " "
+style = "bright-cyan"
+format = "[$symbol$version]($style) "
+
+[python]
+symbol = " "
+format = "[${symbol}${version}( \\($virtualenv\\))]($style) "
+
+[cmd_duration]
+min_time = 3000
+format = "[$duration]($style) "
+
+[line_break]
+disabled = false
+
+[rust]
+format = "[$symbol$version]($style) "
+symbol = " "
+
+[helm]
+disabled = false
+format = "[⎈ $version](bold white) "
