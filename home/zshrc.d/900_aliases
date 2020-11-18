@@ -1,0 +1,64 @@
+
+function maybe_git_fetch () {
+  if ! [ -d ".git" ]; then
+    return
+  fi
+  last_fetch=$(stat -c %Y .git/FETCH_HEAD)
+  time_now=$(date +%s)
+  timeout=60
+  if [[ $((time_now - timeout)) -gt $((last_fetch)) ]]; then
+    (git fetch 2> /dev/null &)
+  fi
+}
+
+alias kw='watch kubectl'
+OLDKUBECONFIG="BAD"
+precmd () {
+  if (( ${+TMUX} )); then
+    envVar="$(tmux display-message -p 'KUBECONFIG_#S_#P_#I')"
+#    if [ "$KUBECONFIG" != "$OLDKUBECONFIG" ] || [ "$envVar" != "$oldEnvVar" ]; then
+      OLDKUBECONFIG=$KUBECONFIG
+      oldEnvVar=$envVar
+      tmux setenv $(tmux display-message -p 'KUBECONFIG_#S_#P_#I') "$KUBECONFIG"
+#    fi
+  fi
+  maybe_git_fetch
+}
+
+start-tmux() {
+    tmux new-session -t default \; neww \; split-window -v \; split-window -h \; previous-window \; attach
+}
+
+create-kind() {
+  kind delete cluster
+  reg_name='kind-registry'
+  reg_port='5000'
+
+    cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
+    endpoint = ["http://${reg_name}:${reg_port}"]
+EOF
+
+  kubectl create ns metrics-server
+  helm upgrade --install metrics bitnami/metrics-server --namespace metrics-server --set apiService.create=true --set extraArgs.kubelet-insecure-tls=true --set extraArgs.kubelet-preferred-address-types=InternalIP --set extraArgs.metric-resolution=30s
+  kubectl create ns prometheus
+  helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.enabled=false --set kubeStateMetrics.enable=false --set nodeExporter.enabled=false
+  running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
+  if [ "${running}" != 'true' ]; then
+      docker run \
+              -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
+              --network container:kind-control-plane \
+    registry:2
+  fi
+
+  # tell https://tilt.dev to use the registry
+  # https://docs.tilt.dev/choosing_clusters.html#discovering-the-registry
+  for node in $(kind get nodes); do
+    kubectl annotate node "${node}" "kind.x-k8s.io/registry=localhost:${reg_port}";
+  done
+}
+
