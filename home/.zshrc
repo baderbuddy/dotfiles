@@ -14,12 +14,6 @@ compinit
 # End of lines added by compinstall
 source ~/config/env.sh
 
-if [[ -d ${HOME}/.zshrc.d ]]; then
-  while read dotd; do
-    source "${dotd}"
-  done < <(find ${HOME}/.zshrc.d -follow -type f -not -name '*.disabled')
-  unset dotd
-fi
 
 # DISABLE_AUTO_TITLE="true"
 
@@ -57,11 +51,6 @@ source <(kubectl completion zsh)
 eval "$(starship init zsh)"
 
 
-alias dotenv=". ./.env"
-alias k="kubectl"
-alias mfa="oathtool --base32 --totp \"$(cat ~/config/mfa.txt)\""
-alias loginFW="KUBECONFIG=\"$HOME/.kube/config-fw\" aws-vault exec ro-identity zsh"
-alias loginFWMfa="mfa | loginFW"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -71,9 +60,16 @@ source $HOME/.asdf/asdf.sh
 #eval $(ssh-agent) > /dev/null
 #ssh-add ~/.ssh/id_rsa
 
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach -t default || start-tmux
-fi
 
 set -o vi
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+if [[ -d ${HOME}/zshrc.d ]]; then
+  while read dotd; do
+    source "${dotd}"
+  done < <(find ${HOME}/zshrc.d -follow -type f -not -name '*.disabled')
+  unset dotd
+fi
+
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t default || start-tmux
+fi

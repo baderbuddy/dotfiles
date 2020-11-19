@@ -62,3 +62,8 @@ EOF
   done
 }
 
+alias dotenv=". ./.env"
+alias k="kubectl"
+alias mfa="oathtool --base32 --totp \"$(cat ~/config/mfa.txt)\""
+alias loginFW="KUBECONFIG=\"$HOME/.kube/config-fw\" aws-vault exec ro-identity zsh"
+alias loginFWMfa="mfa | loginFW"

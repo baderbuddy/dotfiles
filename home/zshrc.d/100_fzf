@@ -1,0 +1,37 @@
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+
+_fzf_complete_git() {
+    ARGS="$@"
+    local branches
+    branches=$(git branch -vv --all)
+    if [[ $ARGS == 'git co'* || $ARGS == 'git checkout'* ]]; then
+        _fzf_complete --reverse $ARGS "$@" < <(
+            echo $branches
+        )
+    else
+        eval "zle ${fzf_default_completion:-expand-or-complete}"
+    fi
+}
+
+_fzf_complete_git_post() {
+    awk '{print $1}'
+}
+
+
+_fzf_complete_go() {
+    ARGS="$@"
+    local tests
+    tests=$(go test -list ".*" ./...)
+    if [[ $ARGS == 'go test'* ]]; then
+        _fzf_complete --reverse $ARGS "$@" < <(
+            echo $tests
+        )
+    else
+        eval "zle ${fzf_default_completion:-expand-or-complete}"
+    fi
+}
+
+_fzf_complete_go() {
+    awk '{print $1}'
+}
