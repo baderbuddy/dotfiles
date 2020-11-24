@@ -9,3 +9,5 @@ sops 3.6.1
 tilt 0.17.12
 nodejs 14.15.1
 starship 0.47.0
+golang 1.15.5
+mockery 2.3.0
