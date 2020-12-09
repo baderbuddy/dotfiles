@@ -11,3 +11,6 @@ nodejs 14.15.1
 starship 0.47.0
 golang 1.15.5
 mockery 2.3.0
+k9s 0.24.1
+pluto 3.4.1
+insights-cli 0.3.0

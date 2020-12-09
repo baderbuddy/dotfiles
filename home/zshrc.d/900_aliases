@@ -44,6 +44,7 @@ containerdConfigPatches:
 EOF
 
   kubectl create ns metrics-server
+  helm update
   helm upgrade --install metrics bitnami/metrics-server --namespace metrics-server --set apiService.create=true --set extraArgs.kubelet-insecure-tls=true --set extraArgs.kubelet-preferred-address-types=InternalIP --set extraArgs.metric-resolution=30s
   kubectl create ns prometheus
   helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.enabled=false --set kubeStateMetrics.enable=false --set nodeExporter.enabled=false

@@ -22,7 +22,21 @@ set list
 set listchars=tab:>-
 
 map <Leader>t :NERDTreeToggleVCS<cr>
+autocmd FileType go map <Leader>v :GoVet<cr>
+autocmd FileType go map <F5> :GoDebugStart<cr>
+autocmd FileType go map <F4> :GoTest<cr>
+autocmd FileType go map <Leader>s :GoAlternate<cr>
 map <F7> gg=G<C-o><C-o>
+
+let g:go_fmt_command = "goimports"
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_metalinter_autosave = 1
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -51,6 +65,7 @@ Plugin 'Shougo/deoplete.nvim'
 Plugin 'roxma/nvim-yarp'
 Plugin 'roxma/vim-hug-neovim-rpc'
 Plugin 'honza/vim-snippets'
+Plugin 'christoomey/vim-tmux-navigator'
 
 
 " The following are examples of different formats supported.
