@@ -29,6 +29,8 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+    asdf
+    git
 #    kube-ps1
 #    git-prompt
     dotenv
@@ -36,6 +38,8 @@ plugins=(
 #    python
 #    pip
 #    nvm
+    golang
+    kubectl
     npm
     docker
     zsh-prompt-benchmark

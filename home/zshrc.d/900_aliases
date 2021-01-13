@@ -44,10 +44,18 @@ containerdConfigPatches:
 EOF
 
   kubectl create ns metrics-server
+helm repo add jetstack https://charts.jetstack.io
   helm update
   helm upgrade --install metrics bitnami/metrics-server --namespace metrics-server --set apiService.create=true --set extraArgs.kubelet-insecure-tls=true --set extraArgs.kubelet-preferred-address-types=InternalIP --set extraArgs.metric-resolution=30s
   kubectl create ns prometheus
   helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.enabled=false --set kubeStateMetrics.enable=false --set nodeExporter.enabled=false
+  kubectl create namespace cert-manager || echo "Namespace already exists"
+  helm get notes -n cert-manager cert-manager || helm install \
+    cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --version v1.0.1 \
+    --set installCRDs=true \
+    --wait
   running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
   if [ "${running}" != 'true' ]; then
       docker run \
@@ -68,3 +76,5 @@ alias k="kubectl"
 alias mfa="oathtool --base32 --totp \"$(cat ~/config/mfa.txt)\""
 alias loginFW="KUBECONFIG=\"$HOME/.kube/config-fw\" aws-vault exec ro-identity zsh"
 alias loginFWMfa="mfa | loginFW"
+alias add-ip='hostname -I | sed "s/ *$//g" >> "/c/Program Files (x86)/Xming/X0.hosts"'
+alias cdroot='cd $(git rev-parse --show-toplevel)'

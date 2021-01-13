@@ -27,6 +27,7 @@ autocmd FileType go map <F5> :GoDebugStart<cr>
 autocmd FileType go map <F4> :GoTest<cr>
 autocmd FileType go map <Leader>s :GoAlternate<cr>
 map <F7> gg=G<C-o><C-o>
+noremap <silent> <c-_> :let @/ = ""<CR>
 
 let g:go_fmt_command = "goimports"
 let g:go_highlight_types = 1
@@ -36,7 +37,7 @@ let g:go_highlight_function_calls = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
-let g:go_metalinter_autosave = 1
+" let g:go_metalinter_autosave = 1
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
