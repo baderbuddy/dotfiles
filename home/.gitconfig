@@ -7,5 +7,6 @@
     c = "!git add -A && git commit -m "
     new-branch = "!git checkout main && git pull && git checkout -b "
     co = "!git checkout "
+    todo = !git diff main..$(git rev-parse --abbrev-ref HEAD) | grep "^+.*TODO"
 [pull]
 	rebase = true
