@@ -10,3 +10,5 @@
     todo = !git diff main..$(git rev-parse --abbrev-ref HEAD) | grep "^+.*TODO"
 [pull]
 	rebase = true
+[core]
+	excludesfile = /home/bader/.gitignore
