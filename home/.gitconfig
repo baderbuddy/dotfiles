@@ -8,6 +8,7 @@
     new-branch = "!git checkout main && git pull && git checkout -b "
     co = "!git checkout "
     todo = !git diff main..$(git rev-parse --abbrev-ref HEAD) | grep "^+.*TODO"
+    todo-file = ! git diff main..$(git rev-parse --abbrev-ref HEAD) -GTODO --compact-summary
 [pull]
 	rebase = true
 [core]
