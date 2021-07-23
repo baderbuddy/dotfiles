@@ -3,12 +3,16 @@ function maybe_git_fetch () {
   if ! [ -d ".git" ]; then
     return
   fi
-  last_fetch=$(stat -c %Y .git/FETCH_HEAD)
+  last_fetch=$(gstat -c %Y .git/FETCH_HEAD)
   time_now=$(date +%s)
   timeout=60
   if [[ $((time_now - timeout)) -gt $((last_fetch)) ]]; then
     (git fetch 2> /dev/null &)
   fi
+}
+
+function fzfgrep () {
+    rg $1 | fzf
 }
 
 alias kw='watch kubectl'
@@ -26,7 +30,8 @@ precmd () {
 }
 
 start-tmux() {
-    tmux new-session -t default \; neww \; split-window -v \; split-window -h \; previous-window \; attach
+    #ssh-add ~/.ssh/id_rsa
+    tmux -CC new-session -t default \; neww \; split-window -v \; split-window -h \; previous-window \; attach
 }
 
 create-kind() {

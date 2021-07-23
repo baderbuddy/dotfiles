@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/home/bader/.oh-my-zsh"
+export ZSH="/Users/bader/.oh-my-zsh"
 ZSH_DOTENV_FILE=.envrc
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -8,7 +8,7 @@ SAVEHIST=1000
 bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/bader/.zshrc'
+zstyle :compinstall filename '/Users/bader/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
@@ -57,8 +57,7 @@ source <(kubectl completion zsh)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-source $HOME/.asdf/asdf.sh
-source /home/bader/.cuddlefish/config
+source /Users/bader/.cuddlefish/config
 
 eval "$(starship init zsh)"
 
@@ -76,5 +75,10 @@ if [[ -d ${HOME}/zshrc.d ]]; then
 fi
 
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach -t default || start-tmux
+    tmux -CC attach -t default || start-tmux
 fi
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export PATH="/opt/homebrew/opt/libpq/bin:${HOME}/projects/go/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
