@@ -11,7 +11,7 @@ function maybe_git_fetch () {
   fi
 }
 
-alias kw='watch kubectl'
+alias kw='viddy kubectl'
 OLDKUBECONFIG="BAD"
 precmd () {
   if (( ${+TMUX} )); then

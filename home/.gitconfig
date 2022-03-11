@@ -13,3 +13,5 @@
 	rebase = true
 [core]
 	excludesfile = /home/bader/.gitignore
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
