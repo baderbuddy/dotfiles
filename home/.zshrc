@@ -129,7 +129,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source <(kubectl completion zsh)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -162,7 +161,21 @@ if [[ -d ${HOME}/zshrc.d ]]; then
 fi
 
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    pushd ~/projects/backstage-twilio
+    git fetch
+    popd
     tmux attach -t default || start-tmux
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+alias golandopen='open -a "/Applications/GoLand.app" "."'
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+source <(kubectl completion zsh)
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+function aws-login() {  eval $( $OWL/bin/owl aws-login $@ ) ; };
+function change-realm() {  eval $( $OWL/bin/owl change-realm $@ ) ; };
+alias tg='_tg(){ travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
+alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'

@@ -15,3 +15,7 @@
 	excludesfile = /home/bader/.gitignore
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+[url "ssh://git@github.com/sendgrid"]
+	insteadOf = https://github.com/sendgrid
+[url "git@github.com:"]
+	insteadOf = https://github.com/

@@ -65,7 +65,7 @@ symbol = " "
 symbol = "⎈ "
 format = " [$symbol$context( \\($namespace\\))]($style) "
 style = "bright-blue"
-disabled = true
+disabled = false
 
 [custom.operatingsystem]
 symbol = ""
